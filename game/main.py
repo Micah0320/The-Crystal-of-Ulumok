@@ -6,14 +6,8 @@ from startUp import *
 from displayScore import *
 from enemy import *
 from crystal import *
-#playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath = setup(surface) 
-#player = player(playerRect, surface, playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath)
- 
-
-#enemies = get_wave()
-#print(len(enemies))
-#Setting up, Move to config
 pygame.display.set_caption("CISS145: GAME TITLE TBD")
+#Removes dead enemies from the game
 def cleanUp(enemies):
     ret = []
     for e in enemies:
@@ -37,6 +31,8 @@ def handleDeath(player, enemies):
             enemies = get_wave(ENEMY_COUNT)
         return enemies
     return enemies
+
+#Gets the player name for scoreboard
 def handleInitial():
     surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT])
     background = pygame.image.load('map.jpg')
@@ -57,11 +53,9 @@ def handleInitial():
                 if event.key == K_RETURN or i >= 3:
                     end = True
                 if pygame.key.name(event.key) in 'abcdefghijklmnopqrstuvwxyz':
-                    #print(event.key.name())
                     name = name[:i] + pygame.key.name(event.key) + name[i + 1:]
                     name.upper()
                     i += 1
-                    #print(i)
                     
         if end:
             break
@@ -71,22 +65,25 @@ def handleInitial():
         pygame.time.delay(1)
         
     return name.upper()
-# main Loop, Extrapolate to a function
+
 def play(player, crystal, enemies, WAVE = 1):
     while(True):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            #First Check if player attcks
             if not player.attacking and not player.deathAnimation:
                 player.checkAttack(event)
+            #Then check if player moves and direction
             if not player.attacking and not player.deathAnimation:
                 player.updatePlayer(event)
         if not player.deathAnimation:
             player.move(crystal.rect)
         player.setAnimation()
         for enemy in enemies:
-            enemy.run(player, crystal)
+            enemy.run(player, crystal, WAVE)
 
+        #Moves enemies if the player dies
         enemies = handleDeath(player, enemies)    
         
         
@@ -95,25 +92,29 @@ def play(player, crystal, enemies, WAVE = 1):
         for enemy in enemies:
             enemy.draw()
         crystal.draw()
+        #Updates the wave label
         Wave_string = ("Wave: %s" % WAVE)
         wave_text = font.render(Wave_string, True, (255,255,255))
         waveTextRect = wave_text.get_rect()
         waveTextRect.x = MAX_WIDTH - 100
         waveTextRect.y = 25
-
+        #Gets the total enemies on the screen
         ENEMY_COUNT = len(enemies)
-    
+        #Draw Current Wave
         drawWave(wave_text, waveTextRect)
+        
         pygame.display.flip()
         pygame.time.delay(1)
         player.updateFrame()
         for enemy in enemies:
             enemy.updateFrame()
         enemies = cleanUp(enemies)
+        #Get a New Wave
         if ENEMY_COUNT == 0:
             WAVE += 1
             enemies = get_wave(ENEMY_COUNT, WAVE)
             player.score += 250
+        #To-Add: Shop Every 5 levels
             #End The Game
         if player.lives < 0 or crystal.health < 0:
             file = open('scores.txt', 'r')
@@ -124,7 +125,6 @@ def play(player, crystal, enemies, WAVE = 1):
                 n = n[:-1]
                 scores.append((int(s),n))
             file.close()
-            #TO-ADD: If the score is in higher than lowest score, prompt player to edit initials
             lowestS, nL = scores[-1]
             name = "---"
             if player.score > lowestS:
@@ -142,7 +142,6 @@ def play(player, crystal, enemies, WAVE = 1):
             
             break
 while(True):
-    #from startUp import *
     playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType = setup(surface)
     player = Player(playerRect, surface, playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType)
     crystal = Crystal(surface, CRYSTAL_IMG, CRYSTAL_RECT)

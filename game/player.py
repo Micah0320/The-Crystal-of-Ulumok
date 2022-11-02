@@ -200,7 +200,7 @@ class Player:
         self.master_attack.append(attackB)
         self.master_attack.append(attackL)
         self.master_attack.append(attackR)
-        self.spell = pygame.image.load('spell.png').convert()
+        self.spell = pygame.image.load('spell.png')
         self.spell.set_alpha(100)
         self.deathAnimation = False
         self.death = death
@@ -231,8 +231,8 @@ class Player:
         #goldTextRect.y = 65
 
 
-        #if self.classType == 'Wizard' and self.attacking:
-            #self.__surface.blit(self.spell, self.rect)
+        if self.classType == 'Wizard' and self.attacking:
+            self.__surface.blit(self.spell, self.rect)
         self.__surface.blit(self.animation[self.frame], self.rect)
         self.__surface.blit(live_text, liveTextRect)
         self.__surface.blit(score_text, scoreTextRect)
@@ -244,6 +244,11 @@ class Player:
             self.dx = 0
             self.dy = 0
             self.moving = 0
+            #print(self.frame)
+            #Prevent Crashing from switching Animations
+            if self.frame > 5:
+                self.frame = 0
+                self.ms = 0
             return
         if self.direction == 'N':
             self.walk_animation = self.master_walk[1]

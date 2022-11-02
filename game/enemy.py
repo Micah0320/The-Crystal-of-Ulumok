@@ -226,7 +226,7 @@ class enemy:
             #print(self.y)
         self.rect.y = self.y
     #To Fix
-    def run(self, player, crystal):
+    def run(self, player, crystal, WAVE = WAVE):
         #print(self.frame)
         self.get_player_dist(player.rect)
         self.get_crystal_dist(crystal)
@@ -334,6 +334,7 @@ class enemy:
                         self.reverse = False
                         self.moving = True
                         self.frame = 0
+                        #self.Target = 'NONE'
                 if self.deathAnimation:
                     #print(self.frame)
                     if self.reverse:
