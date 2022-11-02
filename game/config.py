@@ -22,6 +22,7 @@ surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT])
 background = pygame.image.load('map.jpg')
 
 CRYSTAL_IMG = pygame.image.load('crystal.png')
+pygame.display.set_icon(CRYSTAL_IMG)
 CRYSTAL_RECT = CRYSTAL_IMG.get_rect(topleft=(MAX_WIDTH/2 - 16, MAX_HEIGHT/2 - 16))
 
 playerRect = Rect(playerX - 32, playerY -32, 64, 64)
