@@ -6,7 +6,7 @@ from startUp import *
 from displayScore import *
 from enemy import *
 from crystal import *
-pygame.display.set_caption("CISS145: GAME TITLE TBD")
+pygame.display.set_caption("The Crystal of Ulumok")
 #Removes dead enemies from the game
 def cleanUp(enemies):
     ret = []
