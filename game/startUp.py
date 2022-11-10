@@ -38,13 +38,13 @@ def setup(surface):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == K_a:
+                if event.key == K_a or event.key == K_LEFT:
                     #print("a pressed")
                     option = 0
                     oRect.x = playerRect.x
                     oRect.y = playerRect.y
                     break
-                elif event.key == K_d:
+                elif event.key == K_d or event.key == K_RIGHT:
                     option = 1
                     oRect.x = wizardRect.x
                     oRect.y = wizardRect.y
@@ -62,6 +62,7 @@ def setup(surface):
                         playerAttackR = playerRightAttack
                         playerDeath = knightDeath
                         playerType = 'Knight'
+                        playerAttackSound = pygame.mixer.Sound("SwordSound.mp3")
     
                     else:
                         playerImageF = wizardForwardWalk
@@ -74,10 +75,11 @@ def setup(surface):
                         playerAttackR = wizardRightAttack
                         playerDeath = wizardDeath
                         playerType = 'Wizard'
+                        playerAttackSound = pygame.mixer.Sound("spellSound.mp3")
     
                 
                         #Player Movement
-                    return (playerImageF,playerImageB, playerImageL, playerImageR, playerAttackF, playerAttackB, playerAttackL, playerAttackR, playerDeath, playerType)
+                    return (playerImageF,playerImageB, playerImageL, playerImageR, playerAttackF, playerAttackB, playerAttackL, playerAttackR, playerDeath, playerType, playerAttackSound)
                         #dx, dy = update(dx, dy)
                         #playerX, playerY = move(playerX, playerY, dx, dy)
                         #playerRect.x, playerRect.y = playerX, playerY

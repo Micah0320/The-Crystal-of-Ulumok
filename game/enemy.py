@@ -150,6 +150,8 @@ class enemy:
         self.time = 0
         self.Target = 'NONE'
         self.pause = False
+        self.sound = pygame.mixer.Sound('enemyDeath.wav')
+        self.swingSound = pygame.mixer.Sound('SwordSound.mp3')
     def draw(self):
         #print(self.pause)
         #print(self.alive, self.moving, self.deathAnimation, self.attacking, self.pause, self.frame, self.ms)
@@ -256,7 +258,10 @@ class enemy:
                     if player.attacking and not self.deathAnimation:
                         if self.Target == 'Crystal' or self.direction != player.direction:
                             self.deathAnimation = True
+                            pygame.mixer.Sound.play(self.sound)
                             player.score += 50
+                            if player.luck > 0:
+                                player.gold += random.randint(1, player.luck) * 10
                             player.gold += random.randint(50, 75)
                             self.moving = False
                             self.pause = False
@@ -272,6 +277,7 @@ class enemy:
                         self.frame = 0
             elif self.Target == 'NONE' and self.attacking:
                 player.deathAnimation = True
+                pygame.mixer.Sound.play(self.swingSound)
                 #print(player.deathAnimation)
                 #player.frame = 0
                 #player.ms = 0
@@ -286,6 +292,7 @@ class enemy:
                         else:   self.direction = 'W'
                         self.moving = False
                         self.attacking = True
+                        pygame.mixer.Sound.play(self.swingSound)
                         self.reverse = False
                         self.Target = 'Crystal'
                         self.frame = 0

@@ -14,8 +14,11 @@ class Crystal:
         self.HealthRect = Rect(250, 570, 300, 4)
         self.x = self.rect.x
         self.y = self.rect.y
+        self.regen = 0
     def draw(self):
         self.__surface.blit(self.image, self.rect)
+        if self.health < self.max_health:
+            self.health += self.regen * .01
         #To Do: Draw Health Bar
         pygame.draw.rect(self.__surface, (255,0,0), self.HealthRect)
         ratio = self.health / self.max_health

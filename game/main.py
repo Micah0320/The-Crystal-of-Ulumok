@@ -4,8 +4,10 @@ from config import *
 
 from startUp import *
 from displayScore import *
+from title import *
 from enemy import *
 from crystal import *
+from shop import *
 pygame.display.set_caption("The Crystal of Ulumok")
 #Removes dead enemies from the game
 def cleanUp(enemies):
@@ -114,7 +116,10 @@ def play(player, crystal, enemies, WAVE = 1):
             WAVE += 1
             enemies = get_wave(ENEMY_COUNT, WAVE)
             player.score += 250
-        #To-Add: Shop Every 5 levels
+        #To-Add: Shop Every 5 levels- In Development
+        if WAVE % 5 == 0:
+            shop(surface, player, crystal)
+            WAVE += 1
             #End The Game
         if player.lives < 0 or crystal.health < 0:
             file = open('scores.txt', 'r')
@@ -141,12 +146,23 @@ def play(player, crystal, enemies, WAVE = 1):
             enemies.clear()
             
             break
+#shop(surface)
 while(True):
-    playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType = setup(surface)
-    player = Player(playerRect, surface, playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType)
+    pygame.mixer.music.load('theme.mp3')
+    pygame.mixer.music.play(-1)
+    displayTitle()
+    playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType, playerSound = setup(surface)
+    player = Player(playerRect, surface, playerForwardWalk, playerBackWalk, playerLeftWalk, playerRightWalk, playerForwardAttack, playerBackAttack, playerLeftAttack, playerRightAttack, playerDeath, playerType, playerSound)
+    
     crystal = Crystal(surface, CRYSTAL_IMG, CRYSTAL_RECT)
     enemies = get_wave()
     font = pygame.font.Font('freesansbold.ttf', 20)
+    pygame.mixer.music.stop()
+    #Main Game Loop Music
     play(player, crystal, enemies)
+
+    #pygame.mixer.music.load('theme.mp3')
+    #pygame.mixer.music.play(-1)
     displayScore()
+    #pygame.mixer.music.stop()
     

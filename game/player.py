@@ -173,7 +173,7 @@ for i in range(1, 6):
 class Player:
     
     #Initialize the player
-    def __init__(self, pRect, surface, walkF, walkB, walkL, walkR, attackF, attackB, attackL, attackR, death, classType):
+    def __init__(self, pRect, surface, walkF, walkB, walkL, walkR, attackF, attackB, attackL, attackR, death, classType, attackSound):
         self.dx = 0
         self.dy = 0
         self.x = pRect.x
@@ -208,9 +208,11 @@ class Player:
         self.lives = 3
         self.score = 0
         self.gold = 0
+        self.speed_level = 0
+        self.luck = 0
+        self.sound = attackSound
 
     def draw(self):
-        #print(self.frame)
         #Gets Lives for player and displays it on the screen
         live_string = ("Lives: %s" %self.lives)
         live_text = font.render(live_string, True, (255,255,255))
@@ -224,11 +226,12 @@ class Player:
         scoreTextRect.x = 0
         scoreTextRect.y = 25
 
-        #gold_string = ("Gold: %s" %self.gold)
-        #gold_text = font.render(gold_string, True, (255,255,255))
-        #goldTextRect = score_text.get_rect()
-        #goldTextRect.x = MAX_WIDTH - 100
-        #goldTextRect.y = 65
+        #Gold Info
+        gold_string = ("Gold: %s" %self.gold)
+        gold_text = font.render(gold_string, True, (255,255,255))
+        goldTextRect = score_text.get_rect()
+        goldTextRect.x = MAX_WIDTH - 100
+        goldTextRect.y = 65
 
 
         if self.classType == 'Wizard' and self.attacking:
@@ -236,6 +239,7 @@ class Player:
         self.__surface.blit(self.animation[self.frame], self.rect)
         self.__surface.blit(live_text, liveTextRect)
         self.__surface.blit(score_text, scoreTextRect)
+        #Draws Gold
         #self.__surface.blit(gold_text, goldTextRect)
 
     def setAnimation(self):
@@ -289,6 +293,7 @@ class Player:
                 self.moving = False
                 self.frame = 0
                 self.ms = 0
+                pygame.mixer.Sound.play(self.sound)
                 #self.animation = setAnimation()
             #print("To be Implemented(Left Click)")
             if event.button == 3:
@@ -298,6 +303,7 @@ class Player:
                 self.moving = False
                 self.frame = 0
                 self.ms = 0
+                pygame.mixer.Sound.play(self.sound)
                 #self.animation = setAnimation()
             #print("To be Implemented(Right Click)")
     def updatePlayer(self, event):
@@ -305,44 +311,44 @@ class Player:
             key = event.key
             #print(key)
             if key == K_UP:
-                self.dy = -.35
+                self.dy = -.35 - (.01 * self.speed_level)
                 self.direction = 'N'
                 self.moving = True
             elif key == K_w:
-                self.dy = -.35
+                self.dy = -.35 - (.01 * self.speed_level)
                 self.direction = 'N'
                 self.moving = True
 
             elif key == K_DOWN:
                 #print("KeyDown")
-                self.dy = 0.35
+                self.dy = 0.35 + (.01 * self.speed_level)
                 self.direction = 'S'
                 self.moving = True
             elif key == K_s:
                 #print("South")
-                self.dy = 0.35
+                self.dy = 0.35 + (.01 * self.speed_level)
                 self.direction = 'S'
                 self.moving = True
                 
             elif key == K_RIGHT:
-                self.dx = 0.35
+                self.dx = 0.35 + (.01 * self.speed_level)
                 self.direction = 'E'
                 self.moving = True
                 return
             elif key == K_d:
-                self.dx = 0.35
+                self.dx = 0.35 + (.01 * self.speed_level)
                 self.direction = 'E'
                 self.moving = True
                 return
             
             elif key == K_LEFT:
-                self.dx = -0.35
+                self.dx = -0.35 - (.01 * self.speed_level)
                 self.direction = 'W'
                 self.moving = True
                 
                 
             elif key == K_a:
-                self.dx = -0.35
+                self.dx = -0.35 - (.01 * self.speed_level)
                 self.direction = 'W'
                 self.moving = True
             elif key == K_SPACE:
@@ -352,6 +358,7 @@ class Player:
                 self.moving = False
                 self.frame = 0
                 self.ms = 0
+                pygame.mixer.Sound.play(self.sound)
                 
         elif event.type == KEYUP:
             key = event.key
@@ -389,6 +396,7 @@ class Player:
         prect.x = self.x + self.dx
         #print(prect.x)
         prect.y = self.y + self.dy
+        
         if prect.colliderect(CRYSTAL_RECT):
             return
         if (self.rect.x + self.dx < MAX_WIDTH - (self.rect.w * 2) and self.rect.x + self.dx > self.rect.w):
