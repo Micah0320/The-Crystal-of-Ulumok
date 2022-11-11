@@ -163,6 +163,6 @@ while(True):
 
     #pygame.mixer.music.load('theme.mp3')
     #pygame.mixer.music.play(-1)
-    displayScore()
+    displayScore(surface)
     #pygame.mixer.music.stop()
     

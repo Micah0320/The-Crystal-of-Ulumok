@@ -1,7 +1,7 @@
 import pygame
 from player import *
 from pygame.locals import *
-def displayScore():
+def displayScore(surface):
     font = pygame.font.Font('freesansbold.ttf', 32)
     text = font.render('SCORES', True, (255,255,255))
     textRect = text.get_rect()

@@ -18,7 +18,8 @@ playerY = MAX_HEIGHT / 2 - (75 + 32)
 dx = 0
 dy = 0
 
-surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT])
+surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT], pygame.FULLSCREEN)
+#surface = pygame.display.set_mode(pygame.FULLSCREEN)
 background = pygame.image.load('map.jpg')
 
 CRYSTAL_IMG = pygame.image.load('crystal.png')
