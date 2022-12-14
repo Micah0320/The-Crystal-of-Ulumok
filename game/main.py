@@ -9,6 +9,8 @@ from enemy import *
 from crystal import *
 from shop import *
 pygame.display.set_caption("The Crystal of Ulumok")
+#Sets the cursor to be invisible
+pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 #Removes dead enemies from the game
 def cleanUp(enemies):
     ret = []
@@ -36,7 +38,7 @@ def handleDeath(player, enemies):
 
 #Gets the player name for scoreboard
 def handleInitial():
-    surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT])
+    surface = pygame.display.set_mode([MAX_WIDTH, MAX_HEIGHT], pygame.FULLSCREEN)
     background = pygame.image.load('map.jpg')
     font = pygame.font.Font('freesansbold.ttf', 20)
     name = "---"
@@ -90,10 +92,12 @@ def play(player, crystal, enemies, WAVE = 1):
         
         
         surface.blit(background, (0,0))
-        player.draw()
+        
         for enemy in enemies:
             enemy.draw()
         crystal.draw()
+        player.draw()
+        
         #Updates the wave label
         Wave_string = ("Wave: %s" % WAVE)
         wave_text = font.render(Wave_string, True, (255,255,255))
@@ -118,7 +122,15 @@ def play(player, crystal, enemies, WAVE = 1):
             player.score += 250
         #To-Add: Shop Every 5 levels- In Development
         if WAVE % 5 == 0:
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('shopTheme.mp3')
+            pygame.mixer.music.play(-1)
+    
             shop(surface, player, crystal)
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('BattleSong.mp3')
+            pygame.mixer.music.play(-1)
+    
             WAVE += 1
             #End The Game
         if player.lives < 0 or crystal.health < 0:
@@ -159,8 +171,10 @@ while(True):
     font = pygame.font.Font('freesansbold.ttf', 20)
     pygame.mixer.music.stop()
     #Main Game Loop Music
+    pygame.mixer.music.load('BattleSong.mp3')
+    pygame.mixer.music.play(-1)
     play(player, crystal, enemies)
-
+    pygame.mixer.music.stop()
     #pygame.mixer.music.load('theme.mp3')
     #pygame.mixer.music.play(-1)
     displayScore(surface)

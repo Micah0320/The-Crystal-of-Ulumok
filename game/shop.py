@@ -16,6 +16,8 @@ def shop(surface, player, crystal):
     textRect.x = 210
     textRect.y = 150
 
+
+    coins = pygame.mixer.Sound('coins.ogg')
     goldtext = font.render('Gold: ' + str(player.gold), True, (255,255,255))
     goldtextRect = goldtext.get_rect()
     goldtextRect.x = 210
@@ -25,6 +27,7 @@ def shop(surface, player, crystal):
     frame = 0
     items = ['Crystal of Life', 'Speed Crystal', 'Crystal Rabbit\'s Foot', 'Reinforced Gem-Plating', 'Gem Buffing', 'Heart of Ulumok']
     itemPrice = [500, 750, 1000, 1500, 500, 1750]
+    itemDes = ['Grants a life', 'Makes you move faster', ' Gives more money per kill', 'Increases the Gem\'s health', 'Heals the Gem', 'Gives the Gem regen']
     itemGet = []
     itemsPurchased = []
     #Puts the items in the shop randomly
@@ -36,6 +39,12 @@ def shop(surface, player, crystal):
         itemGet = list(s)
     font = pygame.font.Font('freesansbold.ttf', 16)
 
+    textHelp = font.render('[ESC] - Exit Shop', True, (255,255,255))
+    textHelpRect = textHelp.get_rect()
+    textHelpRect.x = goldtextRect.x
+    textHelpRect.y = goldtextRect.y + 55
+
+
     textItem0 = font.render(items[itemGet[0]], True, (255,255,255))
     textItem0Rect = textItem0.get_rect()
     textItem0Rect.x = itemRect0.x - textItem0Rect.w / 2
@@ -46,9 +55,15 @@ def shop(surface, player, crystal):
     textItemPrice0Rect.x = itemRect0.x 
     textItemPrice0Rect.y = itemRect0.y + 75
 
+    textItemDesc = font.render(str(itemDes[itemGet[0]]), True, (255,255,255))
+    textItemDescRect = textItemDesc.get_rect()
+    textItemDescRect.x = itemRect0.x - (textItemDescRect.w / 2)
+    textItemDescRect.y = textItemPrice0Rect.y + 30
+
+    
     textItem1 = font.render(items[itemGet[1]], True, (255,255,255))
     textItem1Rect = textItem1.get_rect()
-    textItem1Rect.x = itemRect1.x - textItem1Rect.w / 2
+    textItem1Rect.x = itemRect1.x - (textItem1Rect.w / 2)
     textItem1Rect.y = itemRect1.y + 50
 
     textItemPrice1 = font.render(str(itemPrice[itemGet[1]]), True, (255,255,255))
@@ -56,16 +71,26 @@ def shop(surface, player, crystal):
     textItemPrice1Rect.x = itemRect1.x
     textItemPrice1Rect.y = itemRect1.y + 75
 
+    textItemDesc1 = font.render(str(itemDes[itemGet[1]]), True, (255,255,255))
+    textItemDescRect1 = textItemDesc.get_rect()
+    textItemDescRect1.x = itemRect1.x + (textItemDescRect.w / 2 + 10) - (textItemDescRect1.w) 
+    textItemDescRect1.y = textItemPrice1Rect.y + 30
+    
     textItem2 = font.render(items[itemGet[2]], True, (255,255,255))
     textItem2Rect = textItem2.get_rect()
-    textItem2Rect.x = itemRect2.x - textItem2Rect.w / 2
+    textItem2Rect.x = itemRect2.x - (textItem2Rect.w / 2)
     textItem2Rect.y = itemRect2.y + 50
 
     textItemPrice2 = font.render(str(itemPrice[itemGet[2]]), True, (255,255,255))
     textItemPrice2Rect = textItemPrice2.get_rect()
-    textItemPrice2Rect.x = itemRect2.x
+    textItemPrice2Rect.x = itemRect2.x 
     textItemPrice2Rect.y = itemRect2.y + 75
 
+    textItemDesc2 = font.render(str(itemDes[itemGet[2]]), True, (255,255,255))
+    textItemDescRect2 = textItemDesc.get_rect()
+    textItemDescRect2.x = itemRect2.x + (textItemDescRect1.w / 2) - (textItemDescRect2.w / 2)
+    textItemDescRect2.y = textItemPrice2Rect.y + 30
+    
     Exit = False
     option = 0
     oRect = Rect(itemRect0)
@@ -90,6 +115,7 @@ def shop(surface, player, crystal):
                 if event.key == K_RETURN:
                     price = itemPrice[itemGet[option]]
                     if player.gold >= price:
+                        pygame.mixer.Sound.play(coins)
                         if itemGet[option] == 0:
                             player.lives += 1
                             player.gold -= price
@@ -127,16 +153,20 @@ def shop(surface, player, crystal):
         surface.blit(item, itemRect0)
         surface.blit(textItem0, textItem0Rect)
         surface.blit(textItemPrice0, textItemPrice0Rect)
-
+        surface.blit(textItemDesc, textItemDescRect)
+        
         surface.blit(item, itemRect1)
         surface.blit(textItem1, textItem1Rect)
         surface.blit(textItemPrice1, textItemPrice1Rect)
+        surface.blit(textItemDesc1, textItemDescRect1)
 
         surface.blit(item, itemRect2)
         surface.blit(textItem2, textItem2Rect)
         surface.blit(textItemPrice2, textItemPrice2Rect)
+        surface.blit(textItemDesc2, textItemDescRect2)
 
         surface.blit(text, textRect)
+        surface.blit(textHelp, textHelpRect)
         surface.blit(goldtext, goldtextRect)
         #pygame.draw.rect(surface, (255, 255,0), oRect)
         pygame.display.flip()

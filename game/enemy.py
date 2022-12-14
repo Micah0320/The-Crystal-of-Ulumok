@@ -234,7 +234,7 @@ class enemy:
         self.get_crystal_dist(crystal)
         if self.alive and not self.deathAnimation:
             if self.distance_Player < self.distance_goal and not self.attacking:
-                if self.distance_Player > 70:
+                if self.distance_Player >= 50:
                     if self.x > player.x + 10:
                         self.direction = 'W'
                         self.dx = -.25
@@ -256,18 +256,17 @@ class enemy:
                     #self.Target == 'PLAYER'
                     #print(self.Target, self.attacking, self)
                     if player.attacking and not self.deathAnimation:
-                        if self.Target == 'Crystal' or self.direction != player.direction:
-                            self.deathAnimation = True
-                            pygame.mixer.Sound.play(self.sound)
-                            player.score += 50
-                            if player.luck > 0:
-                                player.gold += random.randint(1, player.luck) * 10
-                            player.gold += random.randint(50, 75)
-                            self.moving = False
-                            self.pause = False
-                            self.attaking = False
-                            self.frame = 0
-                            self.ms = 0
+                        self.deathAnimation = True
+                        pygame.mixer.Sound.play(self.sound)
+                        player.score += 50
+                        if player.luck > 0:
+                            player.gold += random.randint(1, player.luck) * 10
+                        player.gold += random.randint(50, 75)
+                        self.moving = False
+                        self.pause = False
+                        self.attaking = False
+                        self.frame = 0
+                        self.ms = 0
                     elif self.pause == False and not self.attacking:
                         self.pause = True
                         self.dx = 0
@@ -276,14 +275,15 @@ class enemy:
                         self.reverse = False
                         self.frame = 0
             elif self.Target == 'NONE' and self.attacking:
-                player.deathAnimation = True
+                if self.distance_Player <= 50:
+                    player.deathAnimation = True
                 pygame.mixer.Sound.play(self.swingSound)
                 #print(player.deathAnimation)
                 #player.frame = 0
                 #player.ms = 0
                 self.Target = 'NONE'
             else:
-                if self.distance_goal <= 70:
+                if self.distance_goal <= 50:
                     #(self.frame)
                     #print(self.attacking)
                     if not self.attacking:
@@ -299,7 +299,7 @@ class enemy:
                         self.dx = 0
                         self.dy = 0
                     if self.attacking:
-                        crystal.damage(.01 + (.01 * WAVE))
+                        crystal.damage(.01 + (0.05 * (WAVE / 10)))
                 else:
                     #print(self.dx)
                     if self.x > crystal.x + 16:
@@ -362,7 +362,7 @@ class enemy:
                     self.frame -=1
         elif self.pause:
             self.ms += 1
-            if self.ms >= 150:
+            if self.ms >= 125:
                 self.attacking = True
                 self.ms = 0
                 self.frame = 0

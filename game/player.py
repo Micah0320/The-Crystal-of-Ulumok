@@ -2,6 +2,11 @@ import pygame, sys
 from pygame.locals import *
 from spritesheet import SpriteSheet
 from config import *
+
+#Get the manhattan distance
+def manDist(p1, p2):
+    return (abs(p1[0] - p2[0]) + abs(p1[1] - p2[1]))
+
 backWalkRect = Rect(0,0, 64, 64)
 spriteSheet = SpriteSheet('KnightWalk.png')
 player_image = spriteSheet.image_at(backWalkRect, -1)
@@ -212,6 +217,7 @@ class Player:
         self.luck = 0
         self.sound = attackSound
 
+    
     def draw(self):
         #Gets Lives for player and displays it on the screen
         live_string = ("Lives: %s" %self.lives)
@@ -396,9 +402,14 @@ class Player:
         prect.x = self.x + self.dx
         #print(prect.x)
         prect.y = self.y + self.dy
-        
-        if prect.colliderect(CRYSTAL_RECT):
+        pcenter = (prect.x + (prect.w / 2), prect.y + (prect.h/2))
+        crysCenter = (CRYSTAL_RECT.x + (CRYSTAL_RECT.w / 2), CRYSTAL_RECT.y + (CRYSTAL_RECT.h/2))
+
+        #Collision detection based on Manhattan Distance
+        if manDist(pcenter, crysCenter) <= 32:
             return
+        #if prect.colliderect(CRYSTAL_RECT):
+        #   return
         if (self.rect.x + self.dx < MAX_WIDTH - (self.rect.w * 2) and self.rect.x + self.dx > self.rect.w):
             #print(self.rect.x + self.dx)
             self.x += self.dx

@@ -53,7 +53,7 @@ def displayTitle():
                 if event.key == K_h:
                     displayHelp()
                 elif event.key == K_s:
-                    displayScore()
+                    displayScore(surface)
                 elif event.key == K_a:
                     displayAbout()
                 elif event.key == K_RETURN:

@@ -34,8 +34,9 @@ def displayScore(surface):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                exitBool = True
-                break
+                if event.key == K_ESCAPE:
+                    exitBool = True
+                    break
                 
                         #Player Movement
         surface.blit(background, (0,0))
